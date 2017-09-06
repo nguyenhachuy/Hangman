@@ -1,12 +1,13 @@
 var word = "lmao";
 var wordArray = ["L","M","A","O"];
+var guessArray;
 var buttons = document.getElementsByTagName("button");
 
 for(var i = 0; i < buttons.length; i++) {
 	buttons[i].addEventListener("click", checkUserGuess);
 }
 
-document.getElementById("guessRow").innerHTML = prepWord(this);
+document.getElementById("hangman").addEventListener("click", prepWord);
 
 function checkUserGuess() {
 	var guess = this.innerHTML;
@@ -17,14 +18,32 @@ function checkUserGuess() {
 	}
 	updateButtonUI(guess, result);
 
+function prepWord() {
+
+	console.log("prepWord");
+	wordArray = word.split("");
+	guessArray = new Array(wordArray.length);
+	guessArray.fill(false);
+	for(var i = 0; i < guessArray.length; i++) {
+		if(wordArray[i] === " ") {
+			guessArray[i] = true;
+		}
+	}
+
+	document.getElementById("guessRow").innerHTML = makeDashes(word);
+	return result;
+
 }
 
-function prepWord() {
-	console.log("prepWord");
-	var result = "";
+function makeDashes(word) {
+	var result = [];
+
 	for(var i = 0; i < word.length; i++) {
-		result += "_ ";
+		if(word[i] === " ")
+			result.push(" ");
+		else result.push("_");
 	}
+
 	return result;
 }
 
