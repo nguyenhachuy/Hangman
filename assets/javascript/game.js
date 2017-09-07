@@ -1,7 +1,8 @@
-var word = "lmao";
-var wordArray = ["L","M","A","O"];
+var word = "LMAO HAHA";
+var wordArray;
 var guessArray;
 var buttons = document.getElementsByTagName("button");
+var state = 0;
 
 for(var i = 0; i < buttons.length; i++) {
 	buttons[i].addEventListener("click", checkUserGuess);
@@ -15,8 +16,16 @@ function checkUserGuess() {
 	var result = false;
 	if(wordArray.includes(guess)) {
 		result = true;
+		updateGuessUI(guess);
+		document.getElementById("guessRow").innerHTML = updateGuessWord();
 	}
+	else
+		updateHangmanUI();
+
 	updateButtonUI(guess, result);
+	updateGameStatus();
+}
+
 
 function prepWord() {
 
@@ -31,11 +40,10 @@ function prepWord() {
 	}
 
 	document.getElementById("guessRow").innerHTML = makeDashes(word);
-	return result;
 
 }
 
-function makeDashes(word) {
+function makeDashes(word, filler) {
 	var result = [];
 
 	for(var i = 0; i < word.length; i++) {
@@ -47,6 +55,19 @@ function makeDashes(word) {
 	return result;
 }
 
+function updateGuessWord() {
+	var result = [];
+
+	for(var i = 0; i < word.length; i++) {
+		if(guessArray[i] === true)
+			result.push(wordArray[i]);
+		else result.push("_");
+	}
+
+	return result;
+
+}
+
 function main() {
 	checkUserGuess();
 }
@@ -54,9 +75,41 @@ function main() {
 function updateButtonUI(button, status) {
 	var update;
 	if(status) {
-		var update = ` disabled`;
+		var update = ` correct`;
 	}
-	else update = ` btn-lg`;
+	else update = ` wrong`;
 	document.getElementById(`char${button}`).className += update;
 	console.log(document.getElementById(`char${button}`).innerHTML);
+
 }
+
+function updateGuessUI(char) {
+	for(var i = 0; i < guessArray.length; i++) {
+		if(wordArray[i] === char)
+			guessArray[i] = true;
+	}
+
+}
+
+function updateHangmanUI() {
+	if(state < 7) {
+		state++;
+		document.getElementById("hangman").src = `./assets/images/hangman${state}.jpg`;
+		
+	}
+}
+
+function updateGameStatus() {
+
+	if(guessArray.every(x => x === true)) {
+		console.log("Game won");
+		/* Do something in here */
+	}
+
+	else if (state === 6) {
+		console.log("Game lost")
+			/* Do something in here */
+
+		}
+}
+

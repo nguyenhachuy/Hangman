@@ -2,3 +2,10 @@ button {
 	width: inherit;
 }
 
+.correct {
+	background-color: green;
+}
+
+.wrong {
+	background-color: black;
+}
