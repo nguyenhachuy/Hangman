@@ -1,14 +1,23 @@
-var word = "LMAO-HAHA";
+var word = "Poopybutthole".toUpperCase();
 var wordArray;
 var guessArray;
 var buttons = document.getElementsByTagName("button");
 var state = 0;
 
+/* Setting up stuffs */
+
 for(var i = 0; i < buttons.length; i++) {
 	buttons[i].addEventListener("click", checkUserGuess);
 }
 
-document.getElementById("hangman").addEventListener("click", prepWord);
+document.getElementById("play-button").addEventListener("click", prepWord);
+
+document.getElementById("reset-button").addEventListener("click", resetGame);
+
+ window.onload = function() {
+	$('#welcome-modal').modal(show = true);
+ }
+/* Code body */
 
 function checkUserGuess() {
 	var guess = this.innerHTML;
@@ -95,10 +104,9 @@ function updateGuessUI(char) {
 }
 
 function updateHangmanUI() {
-	if(state < 7) {
+	if(state < 6) {
 		state++;
 		document.getElementById("hangman").src = `./assets/images/hangman${state}.jpg`;
-
 	}
 }
 
@@ -107,12 +115,34 @@ function updateGameStatus() {
 	if(guessArray.every(x => x === true)) {
 		console.log("Game won");
 		/* Do something in here */
+		document.getElementById("end-game-text").innerHTML = "You guessed it right! Rick is saved!";
+		$('#end-game-modal').modal(show = true);
+	
 	}
+
 
 	else if (state === 6) {
 		console.log("Game lost")
 			/* Do something in here */
+			document.getElementById("end-game-text").innerHTML = "Glip glop... Grandpa Rick is dead. No more adventures for you Morty";
+			$('#end-game-modal').modal(show = true);
 
 		}
 }
 
+function resetGame() {
+	/* Reset all the buttons */
+	for(var i = 0; i < buttons.length; i++) {
+		buttons[i].removeAttribute("disabled");
+		buttons[i].classList.remove("correct");
+		buttons[i].classList.remove("wrong");
+	}
+
+	/*Reset Mr.Hangman*/
+
+	document.getElementById("hangman").src = "./assets/images/hangman0.jpg";
+	state = 0;
+	/* Reset the phrase */
+
+	prepWord();
+}
