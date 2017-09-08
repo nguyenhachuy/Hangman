@@ -48,11 +48,11 @@ function makeDashes(word, filler) {
 
 	for(var i = 0; i < word.length; i++) {
 		if(word[i] === " ")
-			result.push(" ");
+			result.push("-");
 		else result.push("_");
 	}
 
-	return result;
+	return result.join(" ");
 }
 
 function updateGuessWord() {
@@ -64,7 +64,7 @@ function updateGuessWord() {
 		else result.push("_");
 	}
 
-	return result;
+	return result.join(" ");
 
 }
 
@@ -95,7 +95,7 @@ function updateHangmanUI() {
 	if(state < 7) {
 		state++;
 		document.getElementById("hangman").src = `./assets/images/hangman${state}.jpg`;
-		
+
 	}
 }
 
