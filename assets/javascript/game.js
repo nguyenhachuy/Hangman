@@ -1,4 +1,4 @@
-var word = "LMAO HAHA";
+var word = "LMAO-HAHA";
 var wordArray;
 var guessArray;
 var buttons = document.getElementsByTagName("button");
@@ -12,7 +12,7 @@ document.getElementById("hangman").addEventListener("click", prepWord);
 
 function checkUserGuess() {
 	var guess = this.innerHTML;
-	console.log(guess);
+	//console.log(guess);
 	var result = false;
 	if(wordArray.includes(guess)) {
 		result = true;
@@ -29,12 +29,12 @@ function checkUserGuess() {
 
 function prepWord() {
 
-	console.log("prepWord");
+	//console.log("prepWord");
 	wordArray = word.split("");
 	guessArray = new Array(wordArray.length);
 	guessArray.fill(false);
 	for(var i = 0; i < guessArray.length; i++) {
-		if(wordArray[i] === " ") {
+		if(wordArray[i] === "-") {
 			guessArray[i] = true;
 		}
 	}
@@ -47,7 +47,7 @@ function makeDashes(word, filler) {
 	var result = [];
 
 	for(var i = 0; i < word.length; i++) {
-		if(word[i] === " ")
+		if(word[i] === "-")
 			result.push("-");
 		else result.push("_");
 	}
@@ -63,6 +63,7 @@ function updateGuessWord() {
 			result.push(wordArray[i]);
 		else result.push("_");
 	}
+	console.log(result);
 
 	return result.join(" ");
 
@@ -78,8 +79,10 @@ function updateButtonUI(button, status) {
 		var update = ` correct`;
 	}
 	else update = ` wrong`;
-	document.getElementById(`char${button}`).className += update;
-	console.log(document.getElementById(`char${button}`).innerHTML);
+
+	var tag = document.getElementById(`char${button}`);
+	tag.setAttribute("disabled", "");
+	tag.className += update;
 
 }
 
