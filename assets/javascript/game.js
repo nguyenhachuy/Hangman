@@ -17,72 +17,7 @@ var dict = [
 ];
 /* Setting up stuffs */
 
-// document.getElementById("play-button").addEventListener("click", prepWord);
-
-
- window.onload = function() {
-	$('#welcome-modal').modal(show = true);
- }
 /* Code body */
-
-// function checkUserGuess() {
-// 	var guess = this.innerHTML;
-// 	console.log(guess);
-// 	var result = false;
-// 	if(wordArray.includes(guess)) {
-// 		result = true;
-// 		updateGuessUI(guess);
-// 		document.getElementById("guessRow").innerHTML = updateGuessWord();
-// 	}
-// 	else
-// 		updateHangmanUI();
-
-// 	updateButtonUI(guess, result);
-// 	updateGameStatus();
-// }
-
-
-// function prepWord() {
-
-// 	//console.log("prepWord");
-// 	wordArray = word.split("");
-// 	guessArray = new Array(wordArray.length);
-// 	guessArray.fill(false);
-// 	for(var i = 0; i < guessArray.length; i++) {
-// 		if(wordArray[i] === "-") {
-// 			guessArray[i] = true;
-// 		}
-// 	}
-
-// 	document.getElementById("guessRow").innerHTML = makeDashes(word);
-
-// }
-
-// function makeDashes(word, filler) {
-// 	var result = [];
-
-// 	for(var i = 0; i < word.length; i++) {
-// 		if(word[i] === "-")
-// 			result.push("-");
-// 		else result.push("_");
-// 	}
-
-// 	return result.join(" ");
-// }
-
-// function updateGuessWord() {
-// 	var result = [];
-
-// 	for(var i = 0; i < word.length; i++) {
-// 		if(guessArray[i] === true)
-// 			result.push(wordArray[i]);
-// 		else result.push("_");
-// 	}
-// 	console.log(result);
-
-// 	return result.join(" ");
-
-// }
 
 function updateButtonUI(button, status) {
 	var update;
@@ -103,26 +38,6 @@ function updateHangmanUI(state, status) {
 	}
 }
 
-function updateGameStatus() {
-
-	if(guessArray.every(x => x === true)) {
-		console.log("Game won");
-		/* Do something in here */
-		document.getElementById("end-game-text").innerHTML = "You guessed it right! Rick is saved!";
-		$('#end-game-modal').modal(show = true);
-	
-	}
-
-
-	else if (state === 6) {
-		console.log("Game lost")
-			/* Do something in here */
-			document.getElementById("end-game-text").innerHTML = "Glip glop... Grandpa Rick is dead. No more adventures for you Morty";
-			$('#end-game-modal').modal(show = true);
-
-		}
-}
-
 function resetGame() {
 	/* Reset all the buttons */
 	for(var i = 0; i < buttons.length; i++) {
@@ -134,34 +49,39 @@ function resetGame() {
 	/*Reset Mr.Hangman*/
 
 	document.getElementById("hangman").src = "./assets/images/hangman0.jpg";
-	state = 0;
 	/* Reset the phrase */
 
-	prepWord();
+	hangman.resetGame();
+	document.getElementById("guessRow").innerHTML = hangman.getCurrentGuess();
+
 }
 
 /* Attempt at OOP */
 function Hangman(dict) {
 	/* Initialize necessary variables */
-	this.state = 0,
+	this.state = 0;
 	this.dict = dict;
 	this.wordArray =[];
 	this.guessArray =[];
+	this.currentIndex = 0;
+}
 
+Hangman.prototype.getNextIndex = function() {
+	if(this.currentIndex < dict.length - 1)
+		this.currentIndex++;
+	else
+		this.currentIndex = 0;
 }
 
 Hangman.prototype.prepareGame = function() {
-	console.log("preppin");
-	var word = dict[0].toUpperCase();
+	var word = dict[this.currentIndex].toUpperCase();
+	this.getNextIndex();
 	/* Processing the word */
 	this.wordArray = word.split("");
 	this.guessArray = new Array(this.wordArray.length);
-	for(var i = 0; i < this.wordArray.length; i++) {
-		if(this.wordArray[i] === " ")
-			this.guessArray[i] = this.wordArray[i];
-		else
-			this.guessArray[i] = "_";
-	}
+  this.guessArray = this.wordArray.map(function(value){
+      return value === " " ? " ": "_"; 
+  })
 	//console.log(this.guessArray);
 }
 
@@ -180,7 +100,6 @@ Hangman.prototype.guess = function(char) {
 	}
 	else {
 		this.state >= 6 ? 6 : this.state++;
-		console.log(this.state);
 		return false;
 	}
 }
@@ -195,14 +114,14 @@ Hangman.prototype.gameStatus = function() {
 	}
 
 	if(equal) {
-		console.log("Game won");
+		// console.log("Game won");
 		/* Do something in here */
 		return 1;	
 	}
 
 	/* Check if your game is lost */
 	else if (this.state >= 6) {
-		console.log("Game lost")
+		// console.log("Game lost")
 		return -1;
 	}
 
@@ -213,7 +132,7 @@ Hangman.prototype.gameStatus = function() {
 
 Hangman.prototype.resetGame = function() {
 	this.state = 0;
-	prepareGame();
+	this.prepareGame();
 }
 
 /* Assigning function calls */
@@ -222,9 +141,14 @@ var hangman = new Hangman(dict);
 
 document.getElementById("play-button").addEventListener("click", function() {
 	hangman.prepareGame();
+	document.getElementById("guessRow").innerHTML = hangman.getCurrentGuess();
 });
 
-document.getElementById("reset-button").addEventListener("click", resetGame);
+
+ window.onload = function() {
+	$('#welcome-modal').modal(show = true);
+ }
+
 
 
 for(var i = 0; i < buttons.length; i++) {
@@ -233,5 +157,23 @@ for(var i = 0; i < buttons.length; i++) {
 		updateButtonUI(this.innerHTML, guess);
 		updateHangmanUI(hangman.state, guess);
 		document.getElementById("guessRow").innerHTML = hangman.getCurrentGuess();
+
+		/* Handle game wins */
+		if(hangman.gameStatus() === 1) {
+			console.log("Game won");
+			/* Do something in here */
+			document.getElementById("end-game-text").innerHTML = "You guessed it right! Rick is saved!";
+			$('#end-game-modal').modal(show = true);
+		}
+
+		/*Handle game lost */
+		else if(hangman.gameStatus() === -1) {
+			console.log("Game lost")
+			/* Do something in here */
+			document.getElementById("end-game-text").innerHTML = "Glip glop... Grandpa Rick is dead. No more adventures for you Morty";
+			$('#end-game-modal').modal(show = true);
+		}
 	});
 }
+
+document.getElementById("reset-button").addEventListener("click", resetGame);

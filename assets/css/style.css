@@ -3,14 +3,25 @@ button {
 }
 
 .correct {
-	background-color: green !important;
-	border-color: green !important;
+	background-color: #6FB07F !important;
+	border-color: #6FB07F !important;
 }
 
 .wrong {
-	background-color: black !important;
-	background-color: black !important;
+	background-color: #7E827A !important;
+	border-color: #7E827A !important;
 }
 
-#hangman {
+.input-button {
+	background-color: #2F343B;
+	border-color: #2F343B;
+	color: #E3CDA4;
+}
+
+.input-button:hover {
+	background-color: #C77966;
+	border-color: #C77966;
+}
+.container {
+	background-color: #703030;
 }
