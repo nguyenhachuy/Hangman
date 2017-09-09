@@ -135,6 +135,9 @@ Hangman.prototype.resetGame = function() {
 	this.prepareGame();
 }
 
+
+
+
 /* Assigning function calls */
 
 var hangman = new Hangman(dict);
@@ -177,3 +180,29 @@ for(var i = 0; i < buttons.length; i++) {
 }
 
 document.getElementById("reset-button").addEventListener("click", resetGame);
+
+/* Since guide wants key event */
+
+document.onkeyup = function(event) {
+	var guess = hangman.guess(event.key.toUpperCase());
+	updateButtonUI(event.key.toUpperCase(), guess);
+	updateHangmanUI(hangman.state, guess);
+	document.getElementById("guessRow").innerHTML = hangman.getCurrentGuess();
+
+	/* Handle game wins */
+	if(hangman.gameStatus() === 1) {
+		console.log("Game won");
+		/* Do something in here */
+		document.getElementById("end-game-text").innerHTML = "You guessed it right! Rick is saved!";
+		$('#end-game-modal').modal(show = true);
+	}
+
+	/*Handle game lost */
+	else if(hangman.gameStatus() === -1) {
+		console.log("Game lost")
+		/* Do something in here */
+		document.getElementById("end-game-text").innerHTML = "Glip glop... Grandpa Rick is dead. No more adventures for you Morty";
+		$('#end-game-modal').modal(show = true);
+	}
+};
+
