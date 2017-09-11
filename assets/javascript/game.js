@@ -1,20 +1,20 @@
 var buttons = document.getElementsByClassName("input-button");
-var dict = [
-	"Uncle Steve",
-	"Cousin Nicky",
-	"Beauregard",
-	"Frankenstein",
-	"Sleepy Gary",
-	"Photography Raptor",
-	"Pencilvestyr",
-	"Tinkles",
-	"Hamurai",
-	"Amish Cyborg",
-	"Reverse Giraffe",
-	"Ghost in a Jar",
-	"Baby Wizard",
-	"Duck With Muscles"
-];
+var dict = {
+	"Uncle Steve": "He claimed to be the older brother of Jerry Smith and has persuaded the Smith family that he has been living in the Smith Residence for nearly a year",
+	"Cousin Nicky": "In a flashback scene, he is shown saving the Smith family and Mr. Poopybutthole from within a broken elevator after they see the Hulk Musical.",
+	"Beauregard": "He is the Smith family butler and saves the family and Cousin Nicky when they are captured by a Nazi.",
+	"Frankenstein": "He's a zombie-like monster",
+	"Sleepy Gary": "He passes himself off as a member of the immediate family, as well as Jerry's secret lover.",
+	"Photography Raptor": "It is an alien parasite who takes the appearance of a velociraptor.",
+	"Pencilvestyr": "He is an anthropomorphic pencil who is apparently great lifelong friends with Rick Sanchez and Morty Smith.",
+	"Tinkles": "Summer's imaginary friend who takes her to a magical world called Never Past Bedtime Land. Summer is the only one who can see her and no one else believes that she's real.",
+	"Hamurai": "He is a samurai who wears a suit of armor made out of meat. Mostly ham, but also steaks, sausages, and bacon strips.",
+	"Amish Cyborg": "He has one robotic leg and an arm, the latter having the head of a shovel at the end.",
+	"Reverse Giraffe": "He has a long body and a short neck. He can also walk on his hind legs.",
+	"Ghost in a Jar": "He is a tiny green ghost, inside of a jar",
+	"Baby Wizard": "He is a baby who is dressed in star diapers and a wizard's hat.",
+	"Duck With Muscles": "His final words were 'Oh, wow...Baby Wizard was a Parasite?!...He set me up with my wif...'"
+};
 /* Setting up stuffs */
 
 /* Code body */
@@ -98,20 +98,23 @@ function Hangman(dict) {
 	/* Initialize necessary variables */
 	this.state = 0;
 	this.dict = dict;
+	this.words = Object.keys(this.dict);
+	this.hint = "";
 	this.wordArray =[];
 	this.guessArray =[];
 	this.currentIndex = 0;
 }
 
 Hangman.prototype.getNextIndex = function() {
-	if(this.currentIndex < dict.length - 1)
+	if(this.currentIndex < this.words.length - 1)
 		this.currentIndex++;
 	else
 		this.currentIndex = 0;
 }
 
 Hangman.prototype.prepareGame = function() {
-	var word = dict[this.currentIndex].toUpperCase();
+	var word = this.words[this.currentIndex].toUpperCase();
+	this.hint = this.dict[this.words[this.currentIndex]];
 	this.getNextIndex();
 	/* Processing the word */
 	this.wordArray = word.split("");
@@ -180,6 +183,10 @@ Hangman.prototype.resetGame = function() {
 	this.prepareGame();
 }
 
+Hangman.prototype.getCurrentHint = function() {
+	return this.hint;
+}
+
 
 
 
@@ -191,6 +198,7 @@ document.getElementById("play-button").addEventListener("click", function() {
 	hangman.prepareGame();
 	document.getElementById("guessRow").innerHTML = hangman.getCurrentGuess();
 	$("#guessRow").lettering();
+	$("#hint").text(hangman.getCurrentHint());
 });
 
 
