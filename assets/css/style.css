@@ -32,3 +32,11 @@ button {
 #guessRow {
 	font-size: 10em;
 }
+
+span {
+	display: inline-block;
+}
+
+.delay {
+	animation-delay: 2s;
+}

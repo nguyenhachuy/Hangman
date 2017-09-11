@@ -54,17 +54,45 @@ function resetGame() {
 	hangman.resetGame();
 	document.getElementById("guessRow").innerHTML = hangman.getCurrentGuess();
 	$("#guessRow").lettering();
-	$("#guessRow").children().addClass("animated flash");
-
 }
 
 /* Adding radical text animations */
 
-$(document).ready(function() {
-	$("#guessRow").lettering();
-	$("#guessRow").children().addClass("animated flash");
+// a function to simplify animating each text
+$.fn.extend({
+    animateCss: function (animationName, removeAnimationName) {
+        var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+        this.removeClass('animated ' + removeAnimationName).addClass('animated ' + animationName).one(animationEnd, function() {
+            $(this).removeClass('animated ' + animationName);
+        });
+        return this;
+    }
 });
 
+function updateTextUI(text) {
+	var changedChars = text["charIndexes"];
+	for(var i = 0; i < changedChars.length; i++) {
+		console.log(changedChars[i]);
+		var char = $(`.char${changedChars[i]}`);
+		char.addClass("animated fadeOutUp");
+		var newChar = char.clone();
+		newChar.removeClass("animated hinge");
+		newChar.addClass("delay animated rollIn");
+		newChar.text(text["char"]);
+		char.replaceWith(newChar);
+
+		setTimeout(function(){
+			setTimeout(function(){newChar.removeClass("animated rollIn");}, 3000);
+	
+		},2000);
+		// char.animateCss("hinge", "hinge");
+		// char.replaceWith('<span class="char7 animated rollIn">S</span>')
+	}
+}
+
+$("#hangman").bind("click", function(event) {
+	$("#hangman").animateCss("hinge");
+});
 /* Attempt at OOP */
 function Hangman(dict) {
 	/* Initialize necessary variables */
@@ -99,18 +127,26 @@ Hangman.prototype.getCurrentGuess = function() {
 }
 
 Hangman.prototype.guess = function(char) {
+	var text = {};
+	text["guessResult"] = false;
+	text["charIndexes"] = [];
+	text["char"] = "";
 	if(this.wordArray.includes(char))	{
+		text["guessResult"] = true;
+		text["char"] = char;
 		/* Loop through the guessed word and replace the char */
 		for(var i = 0; i < this.guessArray.length; i++) {
-			if(this.wordArray[i] === char)
+			if(this.wordArray[i] === char) {
+				text["charIndexes"].push(i+1); // Since lettering counts from 1
 				this.guessArray[i] = char;
+			}
 		}
-		return true;
 	}
-	else {
+	else 
 		this.state >= 6 ? 0 : this.state++;
-		return false;
-	}
+	
+
+	return text;
 }
 
 Hangman.prototype.gameStatus = function() {
@@ -155,8 +191,6 @@ document.getElementById("play-button").addEventListener("click", function() {
 	hangman.prepareGame();
 	document.getElementById("guessRow").innerHTML = hangman.getCurrentGuess();
 	$("#guessRow").lettering();
-	$("#guessRow").children().addClass("animated flash");
-
 });
 
 
@@ -168,13 +202,11 @@ document.getElementById("play-button").addEventListener("click", function() {
 
 for(var i = 0; i < buttons.length; i++) {
 	buttons[i].addEventListener("click", function(event) {
-		var guess = hangman.guess(this.innerHTML);
+		var text = hangman.guess(this.innerHTML);
+		var guess = text["guessResult"];
 		updateButtonUI(this.innerHTML, guess);
 		updateHangmanUI(hangman.state, guess);
-		document.getElementById("guessRow").innerHTML = hangman.getCurrentGuess();
-		$("#guessRow").lettering();
-		$("#guessRow").children().addClass("animated flash");
-
+		updateTextUI(text);
 		/* Handle game wins */
 		if(hangman.gameStatus() === 1) {
 			console.log("Game won");
@@ -198,10 +230,11 @@ document.getElementById("reset-button").addEventListener("click", resetGame);
 /* Since guide wants key event */
 
 document.onkeyup = function(event) {
-	var guess = hangman.guess(event.key.toUpperCase());
+	var text = hangman.guess(event.key.toUpperCase());
+	var guess = text["guessResult"];
 	updateButtonUI(event.key.toUpperCase(), guess);
 	updateHangmanUI(hangman.state, guess);
-	document.getElementById("guessRow").innerHTML = hangman.getCurrentGuess();
+	updateTextUI(text);
 
 	/* Handle game wins */
 	if(hangman.gameStatus() === 1) {
