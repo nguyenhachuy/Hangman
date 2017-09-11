@@ -56,6 +56,13 @@ function resetGame() {
 
 }
 
+/* Adding radical text animations */
+
+$(document).ready(function() {
+	$("#guessRow").lettering();
+	$("#guessRow").children().addClass("animated flash");
+});
+
 /* Attempt at OOP */
 function Hangman(dict) {
 	/* Initialize necessary variables */
@@ -148,9 +155,9 @@ document.getElementById("play-button").addEventListener("click", function() {
 });
 
 
- window.onload = function() {
-	$('#welcome-modal').modal(show = true);
- }
+ // window.onload = function() {
+	// $('#welcome-modal').modal(show = true);
+ // }
 
 
 
