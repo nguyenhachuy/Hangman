@@ -53,6 +53,8 @@ function resetGame() {
 
 	hangman.resetGame();
 	document.getElementById("guessRow").innerHTML = hangman.getCurrentGuess();
+	$("#hint").text(hangman.getCurrentHint());
+
 	$("#guessRow").lettering();
 }
 
