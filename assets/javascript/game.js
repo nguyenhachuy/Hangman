@@ -53,6 +53,8 @@ function resetGame() {
 
 	hangman.resetGame();
 	document.getElementById("guessRow").innerHTML = hangman.getCurrentGuess();
+	$("#guessRow").lettering();
+	$("#guessRow").children().addClass("animated flash");
 
 }
 
@@ -106,7 +108,7 @@ Hangman.prototype.guess = function(char) {
 		return true;
 	}
 	else {
-		this.state >= 6 ? 6 : this.state++;
+		this.state >= 6 ? 0 : this.state++;
 		return false;
 	}
 }
@@ -152,12 +154,15 @@ var hangman = new Hangman(dict);
 document.getElementById("play-button").addEventListener("click", function() {
 	hangman.prepareGame();
 	document.getElementById("guessRow").innerHTML = hangman.getCurrentGuess();
+	$("#guessRow").lettering();
+	$("#guessRow").children().addClass("animated flash");
+
 });
 
 
- // window.onload = function() {
-	// $('#welcome-modal').modal(show = true);
- // }
+ window.onload = function() {
+	$('#welcome-modal').modal(show = true);
+ }
 
 
 
@@ -167,6 +172,8 @@ for(var i = 0; i < buttons.length; i++) {
 		updateButtonUI(this.innerHTML, guess);
 		updateHangmanUI(hangman.state, guess);
 		document.getElementById("guessRow").innerHTML = hangman.getCurrentGuess();
+		$("#guessRow").lettering();
+		$("#guessRow").children().addClass("animated flash");
 
 		/* Handle game wins */
 		if(hangman.gameStatus() === 1) {
