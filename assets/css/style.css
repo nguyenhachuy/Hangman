@@ -16,12 +16,19 @@ button {
 	background-color: #2F343B;
 	border-color: #2F343B;
 	color: #E3CDA4;
+	font-size: 5em;
+	width: 1.5em;
 }
 
 .input-button:hover {
 	background-color: #C77966;
 	border-color: #C77966;
 }
-.container {
+
+.container-fluid {
 	background-color: #703030;
+}
+
+#guessRow {
+	font-size: 10em;
 }
