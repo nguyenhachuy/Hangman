@@ -76,20 +76,24 @@ function updateTextUI(text) {
 	for(var i = 0; i < changedChars.length; i++) {
 		console.log(changedChars[i]);
 		var char = $(`.char${changedChars[i]}`);
-		char.addClass("animated fadeOutUp");
-		var newChar = char.clone();
-		newChar.removeClass("animated hinge");
-		newChar.addClass("delay animated rollIn");
-		newChar.text(text["char"]);
-		char.replaceWith(newChar);
-
-		setTimeout(function(){
-			setTimeout(function(){newChar.removeClass("animated rollIn");}, 3000);
-	
-		},2000);
+		lul(char, text["char"]);
 		// char.animateCss("hinge", "hinge");
 		// char.replaceWith('<span class="char7 animated rollIn">S</span>')
 	}
+}
+
+function lul(char, text) {
+	char.addClass("animated hinge");
+	setTimeout(function() {
+		console.log(`I is now: ${i}`);
+		var newChar = char.clone();
+		newChar.removeClass("animated hinge");
+		newChar.addClass("animated rollIn");
+		newChar.text(text);
+		char.replaceWith(newChar);
+
+	}, 1000);
+
 }
 
 $("#hangman").bind("click", function(event) {

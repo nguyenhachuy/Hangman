@@ -25,20 +25,24 @@ button {
 	border-color: #C77966;
 }
 
-.container-fluid {
+.background {
 	background-color: #703030;
 }
 
 #guessRow {
-	font-size: 10em;
+	font-size: 6em;
 }
 
 span {
 	display: inline-block;
-  white-space:pre; /* wacky ass fix */
+ 	white-space:pre; /* wacky ass fix */
 
 }
 
 .delay {
 	animation-delay: 2s;
+}
+
+h1 {
+	color: #E3CDA4;
 }
