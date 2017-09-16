@@ -1,3 +1,7 @@
+* {
+	font-family: 'Open Sans', sans-serif;
+}
+
 button {
 	width: inherit;
 }
@@ -16,7 +20,7 @@ button {
 	background-color: #2F343B;
 	border-color: #2F343B;
 	color: #E3CDA4;
-	font-size: 5em;
+	font-size: 3.6em;
 	width: 1.5em;
 }
 
@@ -45,4 +49,8 @@ span {
 
 h1 {
 	color: #E3CDA4;
+}
+
+#hangman {
+	height: 500px !important;
 }
